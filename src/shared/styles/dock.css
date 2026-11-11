@@ -1,0 +1,258 @@
+/* ==========================================================================
+   Application dock (shared/components/layout/AppDock) — ported from
+   hims-ui-new AppDock: a vertical strip on the right edge with Mac-style
+   magnification, an "All applications" launcher panel beside it, and a
+   floating button + sheet below lg. App tiles reuse .hdr-app (header.css).
+   ========================================================================== */
+
+/* Room for the dock. Released when the dock is auto-hidden (AppDock sets data-dock="hidden" on <html>) or below lg. */
+@media (min-width: 1024px) {
+    html:not([data-dock='hidden']) .dock-reserve {
+        padding-right: calc(var(--layout-page-p) + 4.25rem);
+    }
+}
+
+.app-dock {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    z-index: 40;
+    transform: translateY(-50%);
+    padding-left: 2rem;
+}
+
+.app-dock.is-raised {
+    z-index: 60;
+}
+
+.app-dock-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: rgb(15 23 42 / 0.5);
+    animation: fx-fade var(--duration-normal) ease-out both;
+}
+
+/* Auto-hide: a thin tab until the pointer reaches the edge. */
+.app-dock__handle {
+    display: block;
+    height: 5rem;
+    width: 0.5rem;
+    border-radius: 9999px 0 0 9999px;
+    background-color: color-mix(in srgb, var(--primary) 70%, transparent);
+    transition: background-color var(--duration-fast);
+}
+
+.app-dock__handle:hover {
+    background-color: var(--primary);
+}
+
+.app-dock__list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    border: 1px solid var(--border);
+    border-right: 0;
+    border-radius: 16px 0 0 16px;
+    background-color: var(--surface);
+    padding: 0.75rem 0.5rem;
+    list-style: none;
+    box-shadow: 0 20px 40px -8px rgb(var(--shadow-color) / 0.16), 0 8px 16px -8px rgb(var(--shadow-color) / 0.08);
+    animation: fx-fade var(--duration-normal) ease-out both;
+}
+
+.app-dock__item {
+    position: relative;
+}
+
+.app-dock__app,
+.app-dock__all {
+    display: block;
+    border-radius: 12px;
+    transform-origin: right center;
+    transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.app-dock__app .hdr-app__icon {
+    font-size: 0.875rem;
+}
+
+.app-dock__all {
+    display: flex;
+    height: 2.5rem;
+    width: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-dark);
+    background-color: var(--surface-hover);
+    color: var(--text-secondary);
+}
+
+.app-dock__all:hover {
+    color: var(--foreground);
+}
+
+.app-dock__app:focus-visible,
+.app-dock__all:focus-visible,
+.app-dock__handle:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+/* Magnification: the hovered icon and its neighbours grow. */
+.is-mag-1 { transform: scale(1.4); }
+.is-mag-2 { transform: scale(1.15); }
+.is-mag-3 { transform: scale(1.07); }
+
+@media (prefers-reduced-motion: reduce) {
+    :is(.is-mag-1, .is-mag-2, .is-mag-3) { transform: none; }
+}
+
+html[data-motion='reduced'] :is(.is-mag-1, .is-mag-2, .is-mag-3) {
+    transform: none;
+}
+
+/* Dot beside the application the user is in. */
+.app-dock__current {
+    position: absolute;
+    right: -0.375rem;
+    top: 50%;
+    height: 0.375rem;
+    width: 0.375rem;
+    transform: translateY(-50%);
+    border-radius: 9999px;
+    background-color: var(--primary);
+}
+
+.app-dock__sep {
+    height: 1px;
+    width: 1.5rem;
+    background-color: var(--border);
+}
+
+/* Name to the left of the icon on hover / focus. */
+.app-dock__tip {
+    pointer-events: none;
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    margin-right: 2rem;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    border-radius: 6px;
+    background: #291c14;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    color: #fff;
+    opacity: 0;
+    box-shadow: 0 8px 20px -4px rgb(0 0 0 / 0.2);
+    transition: opacity var(--duration-fast);
+}
+
+.dark .app-dock__tip {
+    background: #1e293b;
+    color: #f1f5f9;
+}
+
+.app-dock__tip kbd {
+    margin-left: 0.25rem;
+    font-family: inherit;
+    opacity: 0.8;
+}
+
+.app-dock__item:hover .app-dock__tip,
+.app-dock__item:focus-within .app-dock__tip {
+    opacity: 1;
+}
+
+/* Launcher panel, to the left of the dock. */
+.app-dock__panel {
+    position: absolute;
+    right: calc(100% - 2rem + 20px);
+    top: 50%;
+    display: flex;
+    width: 28rem;
+    /* Never taller than the window (the dock is centred in it, so the panel is too). */
+    max-height: min(80vh, calc(100vh - 2rem));
+    /* `translate`, not `transform`: the fx-scale-in open animation animates `transform` and would drop the
+       centring, pushing the bottom half of the panel off the screen. */
+    translate: 0 -50%;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    color: var(--foreground);
+    box-shadow: 0 20px 40px -8px rgb(var(--shadow-color) / 0.16), 0 8px 16px -8px rgb(var(--shadow-color) / 0.08);
+    animation: fx-scale-in var(--duration-normal) var(--ease-emphasized) both;
+    transform-origin: right center;
+}
+
+.app-launcher {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 0%;
+    flex-direction: column;
+}
+
+.app-launcher__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+@media (min-width: 640px) {
+    .app-launcher__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.app-launcher__foot {
+    border-top: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+}
+
+/* Below lg: floating button + bottom sheet. */
+.app-dock-fab {
+    position: fixed;
+    bottom: 5rem;
+    right: 1rem;
+    z-index: 40;
+    display: flex;
+    height: 3rem;
+    width: 3rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: var(--primary);
+    color: #fff;
+    box-shadow: 0 20px 40px -8px rgb(var(--shadow-color) / 0.3);
+    transition: background-color var(--duration-fast);
+}
+
+.app-dock-fab:hover {
+    background-color: var(--primary-hover);
+}
+
+.app-dock-fab:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.app-dock-sheet .ui-modal__body {
+    display: flex;
+    max-height: 70vh;
+    flex-direction: column;
+    padding: 0;
+}
+
+@media print {
+    .app-dock,
+    .app-dock-fab,
+    .app-dock-backdrop {
+        display: none !important;
+    }
+}

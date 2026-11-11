@@ -1,0 +1,24 @@
+/* Keep the sticky header and row actions aligned while the table scrolls. */
+.convocation-events-table {
+  --event-actions-width: calc(3 * var(--control-h-sm) + 2rem);
+}
+
+.convocation-events-table .dt-th--actions,
+.convocation-events-table .dt-td--actions {
+  box-sizing: border-box;
+  width: var(--event-actions-width);
+  min-width: var(--event-actions-width);
+  max-width: var(--event-actions-width);
+  right: 0;
+  padding-inline: 0.75rem;
+  white-space: nowrap;
+}
+
+.convocation-events-table .dt-th--actions {
+  z-index: 4;
+  background-color: var(--table-header-bg);
+}
+
+.convocation-events-table .dt-td--actions {
+  background-color: inherit;
+}

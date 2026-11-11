@@ -1,0 +1,166 @@
+@import "tailwindcss";
+/* Colours, layout (sidebar / header / breadcrumb), tables, buttons and hover effects */
+@import "../shared/styles/index.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html,
+body {
+  font-family: var(--font-sans);
+}
+
+/* Tailwind aliases for the CSS variables in src/shared/styles/variables.css */
+@theme {
+    /* Fonts */
+    --font-sans: "Inter", "Noto Sans Devanagari", "Noto Sans Oriya", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-heading: var(--font-sans);
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    /* Type scale from hims-ui-new: text-h1 … text-table (values in src/shared/styles/typography.css) */
+    --text-h1: 1.225rem;
+    --text-h1--line-height: 1.75rem;
+    --text-h1--font-weight: 600;
+    --text-h1--letter-spacing: -0.02em;
+    --text-h2: 1.375rem;
+    --text-h2--line-height: 1.875rem;
+    --text-h2--font-weight: 600;
+    --text-h2--letter-spacing: -0.015em;
+    --text-h3: 1.125rem;
+    --text-h3--line-height: 1.625rem;
+    --text-h3--font-weight: 600;
+    --text-h3--letter-spacing: -0.01em;
+    --text-h4: 1rem;
+    --text-h4--line-height: 1.5rem;
+    --text-h4--font-weight: 600;
+    --text-h4--letter-spacing: -0.005em;
+    --text-body-lg: 1rem;
+    --text-body-lg--line-height: 1.625rem;
+    --text-body: 0.875rem;
+    --text-body--line-height: 1.375rem;
+    --text-body-sm: 0.8125rem;
+    --text-body-sm--line-height: 1.25rem;
+    --text-caption: 0.75rem;
+    --text-caption--line-height: 1rem;
+    --text-caption--letter-spacing: 0.01em;
+    --text-label: 0.8125rem;
+    --text-label--line-height: 1.125rem;
+    --text-label--font-weight: 500;
+    --text-button: 0.875rem;
+    --text-button--line-height: 1.25rem;
+    --text-button--font-weight: 500;
+    --text-button-sm: 0.8125rem;
+    --text-button-sm--line-height: 1.125rem;
+    --text-button-sm--font-weight: 500;
+    --text-button-lg: 0.9375rem;
+    --text-button-lg--line-height: 1.375rem;
+    --text-button-lg--font-weight: 500;
+    --text-table: 0.8125rem;
+    --text-table--line-height: 1.25rem;
+
+    /* Base Colors */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-surface: var(--surface);
+    --color-surface-hover: var(--surface-hover);
+    --color-surface-active: var(--surface-active);
+    --color-border: var(--border);
+    --color-border-light: var(--border-light);
+    --color-border-dark: var(--border-dark);
+    --color-input: var(--input-border);
+    --color-text-main: var(--foreground);
+    --color-text-secondary: var(--text-secondary);
+
+    /* Core Action Colors */
+    --color-primary: var(--primary);
+    --color-primary-hover: var(--primary-hover);
+    --color-primary-light: var(--primary-light);
+    --color-primary-dark: var(--primary-dark);
+    --color-accent: var(--surface-hover);
+    --color-accent-foreground: var(--foreground);
+    --color-saffron: var(--accent);
+    --color-secondary: var(--secondary);
+    --color-success: var(--success);
+    --color-danger: var(--danger);
+    --color-warning: var(--warning);
+    --color-info: var(--info);
+
+    /* Action Buttons Colors */
+    --color-action-primary-bg: var(--action-primary-bg);
+    --color-action-primary-text: var(--action-primary-text);
+    --color-action-success-bg: var(--action-success-bg);
+    --color-action-success-text: var(--action-success-text);
+    --color-action-danger-bg: var(--action-danger-bg);
+    --color-action-danger-text: var(--action-danger-text);
+    --color-action-warning-bg: var(--action-warning-bg);
+    --color-action-warning-text: var(--action-warning-text);
+    --color-action-info-bg: var(--action-info-bg);
+    --color-action-info-text: var(--action-info-text);
+
+    /* Header Specific */
+    --color-header-text: var(--header-text);
+    --color-header-border: var(--header-border);
+    --color-header-avatar: var(--header-avatar);
+    --color-header-menu: var(--header-menu-bg);
+
+    /* Sidebar Specific */
+    --color-sidebar-bg: var(--sidebar-bg);
+    --color-sidebar-header: var(--sidebar-header);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-hover: var(--sidebar-hover);
+    --color-sidebar-active: var(--sidebar-active);
+    --color-sidebar-text: var(--sidebar-text);
+    --color-sidebar-text-muted: var(--sidebar-text-muted);
+
+    /* Table Specific */
+    --color-table-bg: var(--table-bg);
+    --color-table-border: var(--table-border);
+    --color-table-row-border: var(--table-row-border);
+    --color-table-header-bg: var(--table-header-bg);
+    --color-table-header-text: var(--table-header-text);
+    --color-table-row-hover: var(--table-row-hover);
+    --color-table-row-striped: var(--table-row-striped);
+
+    /* Tabs Specific */
+    --color-tab-bg: var(--tab-bg);
+    --color-tab-active: var(--tab-active);
+    --color-tab-text-active: var(--tab-text-active);
+    --color-tab-text-inactive: var(--tab-text-inactive);
+
+    /* Card Specific */
+    --color-card-bg: var(--card-bg);
+    --color-card-border: var(--card-border);
+    --color-card-text: var(--card-text);
+    --color-card-header-bg: var(--card-header-bg);
+    --color-card-header-text: var(--card-header-text);
+    --color-card-header-border: var(--card-header-border);
+    --color-card-icon-bg: var(--card-icon-bg);
+    --color-card-icon-color: var(--card-icon-color);
+
+    /* Form Specific */
+    --color-input-bg: var(--input-bg);
+    --color-input-border: var(--input-border);
+    --color-input-text: var(--input-text);
+
+    /* Modal Specific */
+    --color-modal-header: var(--modal-header);
+    --color-modal-footer: var(--modal-footer);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}

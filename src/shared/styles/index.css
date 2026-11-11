@@ -1,0 +1,25 @@
+/* ==========================================================================
+   Common styles for the shared layout & UI components.
+   Imported once from src/styles/index.css (after Tailwind).
+   Order matters: variables → typography → base → layout pieces → components → motion → Theme settings.
+   ========================================================================== */
+@import "./variables.css";
+@import "./typography.css";
+@import "./base.css";
+@import "./layout.css";
+@import "./sidebar.css";
+@import "./header.css";
+@import "./dock.css";
+@import "./shell.css";
+@import "./breadcrumb.css";
+@import "./page-header.css";
+@import "./card.css";
+@import "./display.css";
+@import "./forms.css";
+@import "./overlay.css";
+@import "./components.css";
+@import "./table.css";
+@import "./data-table.css";
+@import "./buttons.css";
+@import "./motion.css";
+@import "./theme-settings.css";

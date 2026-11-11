@@ -1,0 +1,242 @@
+/* ==========================================================================
+   Overlays — Modal, DialogModal, StatusModal, Offcanvas (hims-ui-new DialogShell).
+   White panel, hairline border, header with a divider, tinted footer.
+   Modals become bottom sheets on phones; drawers go full width.
+   ========================================================================== */
+
+.ui-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+}
+
+.ui-overlay--center {
+    align-items: flex-end;
+    justify-content: center;
+}
+
+@media (min-width: 640px) {
+    .ui-overlay--center {
+        align-items: center;
+        padding: 1rem;
+    }
+}
+
+.ui-overlay--right { justify-content: flex-end; }
+.ui-overlay--left { justify-content: flex-start; }
+.ui-overlay--top { align-items: flex-start; }
+.ui-overlay--bottom { align-items: flex-end; }
+
+.ui-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(15 23 42 / 0.5);
+    animation: fx-fade var(--duration-normal) ease-out both;
+}
+
+.ui-overlay.is-closing .ui-backdrop {
+    animation: fx-fade-out var(--duration-normal) ease-in both;
+}
+
+/* ---- Modal panel ------------------------------------------------------ */
+.ui-modal {
+    position: relative;
+    display: flex;
+    width: 100%;
+    max-height: 90vh;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 12px 12px 0 0;
+    background-color: var(--surface);
+    color: var(--foreground);
+    box-shadow: 0 20px 40px -8px rgb(var(--shadow-color) / 0.16), 0 8px 16px -8px rgb(var(--shadow-color) / 0.08);
+    outline: none;
+    animation: fx-sheet-up var(--duration-slow) var(--ease-emphasized) both;
+}
+
+@media (min-width: 640px) {
+    .ui-modal {
+        border-radius: 12px;
+        animation: fx-scale-in var(--duration-normal) var(--ease-emphasized) both;
+    }
+
+    .ui-modal--drop {
+        animation: fx-drop-in var(--duration-slow) var(--fx-out) both;
+    }
+
+    .ui-modal--xs { max-width: 20rem; }
+    .ui-modal--sm { max-width: 24rem; }
+    .ui-modal--md { max-width: 32rem; }
+    .ui-modal--lg { max-width: 42rem; }
+    .ui-modal--xl { max-width: 36rem; }
+    .ui-modal--2xl { max-width: 42rem; }
+    .ui-modal--3xl { max-width: 48rem; }
+    .ui-modal--4xl { max-width: 56rem; }
+    .ui-modal--5xl { max-width: 64rem; }
+    .ui-modal--6xl { max-width: 72rem; }
+    .ui-modal--7xl { max-width: 80rem; }
+    .ui-modal--full { max-width: calc(100vw - 2rem); }
+}
+
+.ui-overlay.is-closing .ui-modal {
+    animation: fx-scale-out var(--duration-normal) ease-in both;
+}
+
+.ui-modal__header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding: 1rem var(--card-p, 1.25rem);
+}
+
+.ui-modal__header--bare {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.ui-modal__title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.625rem;
+    letter-spacing: -0.01em;
+    color: var(--foreground);
+}
+
+.ui-modal__description {
+    margin: 0.25rem 0 0;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary);
+}
+
+.ui-modal__close {
+    display: inline-flex;
+    flex-shrink: 0;
+    margin: -0.25rem -0.5rem 0 0;
+    border-radius: 6px;
+    padding: 0.5rem;
+    color: var(--muted);
+    transition: background-color var(--duration-fast), color var(--duration-fast);
+}
+
+.ui-modal__close:hover {
+    background-color: var(--surface-hover);
+    color: var(--foreground);
+}
+
+.ui-modal__close:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.ui-modal__body {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: var(--card-p, 1.25rem);
+}
+
+.ui-modal__footer {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    border-top: 1px solid var(--border);
+    background-color: var(--surface-hover);
+    padding: 0.75rem var(--card-p, 1.25rem);
+}
+
+@media (min-width: 640px) {
+    .ui-modal__footer {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+    }
+}
+
+/* Toned round icon (confirm / status dialogs) */
+.ui-tone-icon {
+    display: inline-flex;
+    height: 2.25rem;
+    width: 2.25rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+}
+
+.ui-tone-icon--lg {
+    height: 4rem;
+    width: 4rem;
+}
+
+.ui-tone-icon--info,
+.ui-tone-icon--primary { background-color: var(--primary-light); color: var(--primary); }
+.ui-tone-icon--success { background-color: color-mix(in srgb, var(--success) 12%, var(--surface)); color: var(--success); }
+.ui-tone-icon--warning { background-color: color-mix(in srgb, var(--warning) 15%, var(--surface)); color: color-mix(in srgb, var(--warning) 75%, #000); }
+.ui-tone-icon--danger { background-color: color-mix(in srgb, var(--danger) 10%, var(--surface)); color: var(--danger); }
+
+.dark .ui-tone-icon--warning { color: var(--warning); }
+
+/* ---- Drawer (Offcanvas) ----------------------------------------------- */
+.ui-drawer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    color: var(--foreground);
+    box-shadow: 0 20px 40px -8px rgb(var(--shadow-color) / 0.16), 0 8px 16px -8px rgb(var(--shadow-color) / 0.08);
+    outline: none;
+}
+
+.ui-drawer--right,
+.ui-drawer--left {
+    height: 100%;
+    width: 100%;
+    border-top: 0;
+    border-bottom: 0;
+}
+
+@media (min-width: 640px) {
+    .ui-drawer--right,
+    .ui-drawer--left {
+        width: min(var(--drawer-size, 28rem), 100vw);
+    }
+}
+
+.ui-drawer--right { border-right: 0; animation: fx-slide-in-right var(--duration-slow) var(--ease-emphasized) both; }
+.ui-drawer--left { border-left: 0; animation: fx-slide-in-left var(--duration-slow) var(--ease-emphasized) both; }
+
+.ui-drawer--top,
+.ui-drawer--bottom {
+    width: 100%;
+    max-height: min(var(--drawer-size, 50vh), 90vh);
+    border-left: 0;
+    border-right: 0;
+}
+
+.ui-drawer--top { border-top: 0; animation: fx-slide-in-top var(--duration-slow) var(--ease-emphasized) both; }
+.ui-drawer--bottom { border-bottom: 0; animation: fx-sheet-up var(--duration-slow) var(--ease-emphasized) both; }
+
+.ui-overlay.is-closing .ui-drawer--right { animation: fx-slide-out-right 240ms ease-in both; }
+.ui-overlay.is-closing .ui-drawer--left { animation: fx-slide-out-left 240ms ease-in both; }
+.ui-overlay.is-closing .ui-drawer--top,
+.ui-overlay.is-closing .ui-drawer--bottom { animation: fx-fade-out 200ms ease-in both; }
+
+@keyframes fx-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes fx-scale-out { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.96); } }
+@keyframes fx-drop-in { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fx-sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes fx-slide-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes fx-slide-in-left { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes fx-slide-in-top { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+@keyframes fx-slide-out-right { from { transform: translateX(0); } to { transform: translateX(100%); } }
+@keyframes fx-slide-out-left { from { transform: translateX(0); } to { transform: translateX(-100%); } }

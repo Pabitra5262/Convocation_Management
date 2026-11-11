@@ -1,0 +1,59 @@
+/* Breadcrumb — small muted trail, chevron separators, current page in body colour. */
+
+.breadcrumb {
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+}
+
+.breadcrumb__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--breadcrumb-text);
+}
+
+.breadcrumb__item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.breadcrumb__separator {
+    flex-shrink: 0;
+    color: var(--breadcrumb-separator);
+}
+
+.breadcrumb__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 4px;
+    color: var(--breadcrumb-text);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.breadcrumb__link:hover {
+    color: var(--breadcrumb-hover);
+}
+
+.breadcrumb__link:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.breadcrumb__current {
+    font-weight: 500;
+    color: var(--breadcrumb-current);
+}
+
+/* On phones only the last two levels are shown. */
+@media (max-width: 639px) {
+    .breadcrumb__item--far {
+        display: none;
+    }
+}

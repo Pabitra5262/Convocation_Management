@@ -1,0 +1,171 @@
+/* App shell: Sidebar · (Header + scrolling page body). Used by MainLayout. */
+
+.app-shell {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--background);
+}
+
+.app-shell__body {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0%;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.app-main {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0%;
+    overflow-y: auto;
+    outline: none;
+    background-color: var(--background);
+    transition: background-color var(--duration-slow) var(--ease-standard);
+}
+
+/* Same as hims-ui-new .container-page: centred, at most 90rem wide; the space above the heading is 10% smaller. */
+.app-page {
+    flex: 1 0 auto;
+    width: 100%;
+    max-width: var(--content-max, 90rem);
+    margin: 0 auto;
+    padding: calc(var(--layout-page-p) * 0.9) var(--layout-page-p) var(--layout-page-p);
+}
+
+/* Each route change fades the page up into place. */
+.app-page.fx-page {
+    animation: fx-rise var(--duration-slow) var(--fx-out) both;
+}
+
+/* Below lg the sidebar becomes an off-canvas drawer over a dimmed page. */
+.app-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    background: rgb(15 23 42 / 0.5);
+    animation: fx-fade var(--duration-normal) ease-out both;
+}
+
+@media print {
+    .app-shell {
+        height: auto;
+        overflow: visible;
+    }
+
+    .app-sidebar,
+    .app-header,
+    .app-overlay,
+    nav[aria-label="Breadcrumb"] {
+        display: none !important;
+    }
+
+    .app-main {
+        overflow: visible;
+        background: #fff;
+    }
+}
+
+/* ==========================================================================
+   Page tabs — strip of open pages under the header (hims-ui-new PageTabs)
+   ========================================================================== */
+.page-tabs {
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--surface);
+}
+
+.page-tabs__list {
+    display: flex;
+    gap: 0.25rem;
+    overflow-x: auto;
+    margin: 0;
+    padding: 0.25rem var(--layout-page-p);
+    list-style: none;
+}
+
+.page-tabs__item {
+    flex-shrink: 0;
+    animation: fx-pop var(--duration-normal) var(--fx-spring) both;
+}
+
+.page-tabs__item.is-closing {
+    opacity: 0;
+    scale: 0.85;
+    transition: opacity 0.16s, scale 0.16s;
+}
+
+.page-tab {
+    display: flex;
+    height: 1.75rem;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    padding: 0 0.25rem 0 0.625rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: background-color var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast);
+}
+
+.page-tab:hover {
+    background-color: var(--surface-hover);
+}
+
+.page-tab.is-active {
+    border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+    background-color: var(--primary-light);
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.page-tab:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.page-tab__label {
+    max-width: 10rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.page-tab__close {
+    display: inline-flex;
+    border-radius: 4px;
+    padding: 0.125rem;
+    color: var(--muted);
+    transition: background-color var(--duration-fast), color var(--duration-fast);
+}
+
+.page-tab__close:hover {
+    background-color: var(--surface-active);
+    color: var(--foreground);
+}
+
+.page-tabs__clear {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: 0.5rem;
+}
+
+.page-tabs__clear-btn {
+    height: 1.75rem;
+    border-radius: 6px;
+    padding: 0 0.625rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    transition: background-color var(--duration-fast), color var(--duration-fast);
+}
+
+.page-tabs__clear-btn:hover {
+    background-color: var(--surface-hover);
+    color: var(--foreground);
+}
+
+@media print {
+    .page-tabs { display: none; }
+}

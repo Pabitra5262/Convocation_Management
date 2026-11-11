@@ -1,0 +1,145 @@
+/* ==========================================================================
+   Tables — warm header strip, hairline row dividers, soft row hover.
+   1. .data-table: plain <table> markup
+   2. Material React Table / MUI tables (ReusableTable, ReusableMaterialTable)
+   ========================================================================== */
+
+/* ---- 1. Plain tables ------------------------------------------------------ */
+.data-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--table-border);
+    border-radius: 8px;
+    background-color: var(--table-bg);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+}
+
+.data-table thead th {
+    height: var(--control-h);
+    padding: 0 1rem;
+    white-space: nowrap;
+    text-align: left;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--table-header-text);
+    background-color: var(--table-header-bg);
+    border-bottom: 1px solid var(--table-border);
+    border-right: 1px solid var(--table-border);
+}
+
+.data-table thead th:last-child {
+    border-right: none;
+}
+
+.data-table tbody td {
+    height: 3rem;
+    padding: 0 1rem;
+    color: var(--foreground);
+    border-bottom: 1px solid var(--table-row-border);
+}
+
+.data-table tbody tr {
+    background-color: var(--table-bg);
+    transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.data-table tbody tr:hover {
+    background-color: var(--table-row-hover);
+}
+
+.data-table--zebra tbody tr:nth-child(even) {
+    background-color: var(--table-row-striped);
+}
+
+.data-table--zebra tbody tr:hover {
+    background-color: var(--surface-active);
+}
+
+.data-table tbody tr[aria-selected="true"] {
+    background-color: var(--table-row-selected);
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+/* ---- 2. Material React Table ---------------------------------------------- */
+.mrt-themed .MuiPaper-root {
+    background-color: var(--table-bg);
+    color: var(--foreground);
+}
+
+.mrt-themed .MuiTableHead-root .MuiTableCell-root {
+    height: var(--control-h);
+    background-color: var(--table-header-bg);
+    color: var(--table-header-text);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--table-border);
+}
+
+.mrt-themed .MuiTableHead-root .MuiTableSortLabel-root:hover,
+.mrt-themed .MuiTableHead-root .MuiTableSortLabel-root.Mui-active {
+    color: var(--foreground);
+}
+
+.mrt-themed .MuiTableHead-root .MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon {
+    color: var(--primary);
+}
+
+.mrt-themed .MuiTableBody-root .MuiTableRow-root {
+    background-color: var(--table-bg);
+    transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.mrt-themed .MuiTableBody-root .MuiTableRow-root:hover>td {
+    background-color: var(--table-row-hover);
+}
+
+.mrt-themed .MuiTableBody-root .MuiTableCell-root {
+    color: var(--foreground);
+    border-bottom: 1px solid var(--table-row-border);
+}
+
+/* Toolbar icons (search, filter, columns, density, full screen) */
+.mrt-themed .MuiToolbar-root .MuiIconButton-root {
+    color: var(--text-secondary);
+    border-radius: 6px;
+    transition: background-color var(--duration-fast), color var(--duration-fast);
+}
+
+.mrt-themed .MuiToolbar-root .MuiIconButton-root:hover {
+    background-color: var(--surface-hover);
+    color: var(--primary);
+}
+
+/* Pagination: selected page in brand colour */
+.mrt-themed .MuiPaginationItem-root {
+    border-color: var(--table-border);
+    color: var(--foreground);
+}
+
+.mrt-themed .MuiPaginationItem-root:hover {
+    background-color: var(--surface-hover);
+}
+
+.mrt-themed .MuiPaginationItem-root.Mui-selected,
+.mrt-themed .MuiPaginationItem-root.Mui-selected:hover {
+    border-color: var(--primary);
+    background-color: var(--primary);
+    color: #fff;
+}
+
+.mrt-themed .MuiLinearProgress-root {
+    background-color: var(--primary-light);
+}
+
+.mrt-themed .MuiLinearProgress-bar {
+    background-color: var(--primary);
+}

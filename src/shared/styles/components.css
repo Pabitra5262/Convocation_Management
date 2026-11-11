@@ -1,0 +1,329 @@
+/* ==========================================================================
+   Tabs, Badges, Loaders — hims-ui-new Navigation/Tabs, Status/Badge, Loading.
+   ========================================================================== */
+
+/* ---- Tabs ------------------------------------------------------------- */
+.ui-tabs {
+    position: relative;
+    display: flex;
+    gap: 0.25rem;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+/* Pills: solid peach blocks, the selected one a saffron gradient with a white label */
+.ui-tabs--pills {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.ui-tab {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    transition: background-color var(--duration-fast), color var(--duration-fast), box-shadow var(--duration-fast), translate var(--duration-fast);
+}
+
+.ui-tab:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.ui-tab:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.ui-tabs--sm .ui-tab {
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+}
+
+.ui-tabs--pills .ui-tab {
+    height: var(--control-h-sm);
+    border-radius: 9999px;
+    padding: 0 0.875rem;
+    background-color: var(--tab-bg);
+    color: var(--tab-text-inactive);
+    font-weight: 600;
+}
+
+.ui-tabs--pills.ui-tabs--sm .ui-tab {
+    padding: 0 0.625rem;
+}
+
+.ui-tabs--pills .ui-tab:hover:not([aria-selected="true"], :disabled) {
+    background-color: #fbd9a3;
+    color: #3b2308;
+}
+
+.dark .ui-tabs--pills .ui-tab:hover:not([aria-selected="true"], :disabled) {
+    background-color: var(--surface-active);
+    color: var(--foreground);
+}
+
+.ui-tabs--pills .ui-tab[aria-selected="true"] {
+    background-color: var(--tab-active);
+    background-image: linear-gradient(180deg, #ba5b08, #9a4806);
+    color: var(--tab-text-active);
+    font-weight: 700;
+    box-shadow: 0 3px 8px -2px rgb(60 30 10 / 0.35);
+    animation: fx-pop var(--duration-normal) var(--fx-spring);
+}
+
+.ui-tab__count {
+    border-radius: 9999px;
+    padding: 0 0.375rem;
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.ui-tabs--pills .ui-tab__count {
+    background-color: #fff;
+    color: #5a3a12;
+    font-weight: 700;
+}
+
+.ui-tabs--pills .ui-tab[aria-selected="true"] .ui-tab__count {
+    color: #8a4205;
+}
+
+/* Line: underline that slides to the selected tab */
+.ui-tabs--line {
+    overflow-y: hidden;
+    border-bottom: 1px solid var(--border);
+}
+
+.ui-tabs--line .ui-tab {
+    height: var(--control-h);
+    margin-bottom: -1px;
+    border-bottom: 2px solid transparent;
+    padding: 0 0.75rem;
+    color: var(--text-secondary);
+}
+
+.ui-tabs--line.ui-tabs--sm .ui-tab {
+    height: var(--control-h-sm);
+    padding: 0 0.625rem;
+}
+
+.ui-tabs--line .ui-tab:hover:not(:disabled) {
+    color: var(--foreground);
+}
+
+.ui-tabs--line .ui-tab[aria-selected="true"] {
+    color: var(--primary);
+}
+
+.ui-tabs--line .ui-tab__count {
+    background-color: var(--surface-active);
+    color: var(--text-secondary);
+}
+
+.ui-tabs--line .ui-tab[aria-selected="true"] .ui-tab__count {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+.ui-tabs__indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--primary);
+    pointer-events: none;
+    transition: translate var(--duration-normal) var(--fx-out), width var(--duration-normal) var(--fx-out);
+}
+
+.ui-tabpanel {
+    padding-top: 1rem;
+    border-radius: 6px;
+}
+
+.ui-tabpanel:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+/* ---- Badges ----------------------------------------------------------- */
+.ui-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1rem;
+}
+
+.ui-badge--sm {
+    padding: 0 0.375rem;
+    font-size: 0.6875rem;
+}
+
+.ui-badge--lg {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+}
+
+.ui-badge__dot {
+    height: 0.375rem;
+    width: 0.375rem;
+    border-radius: 9999px;
+    background-color: currentColor;
+}
+
+/* Each tone defines --tone; the fill decides how it is used. */
+.ui-badge--neutral {
+    --tone: var(--muted);
+}
+
+.ui-badge--primary {
+    --tone: var(--primary);
+}
+
+.ui-badge--secondary {
+    --tone: var(--accent);
+}
+
+.ui-badge--success {
+    --tone: var(--success);
+}
+
+.ui-badge--warning {
+    --tone: var(--warning);
+}
+
+.ui-badge--danger {
+    --tone: var(--danger);
+}
+
+.ui-badge--info {
+    --tone: var(--info);
+}
+
+.ui-badge--soft {
+    border-color: color-mix(in srgb, var(--tone) 30%, transparent);
+    background-color: color-mix(in srgb, var(--tone) 12%, var(--surface));
+    color: color-mix(in srgb, var(--tone) 80%, #000);
+}
+
+.ui-badge--neutral.ui-badge--soft {
+    border-color: var(--border);
+    background-color: var(--surface-active);
+    color: var(--text-secondary);
+}
+
+.dark .ui-badge--soft {
+    color: var(--tone);
+}
+
+.dark .ui-badge--neutral.ui-badge--soft {
+    color: var(--text-secondary);
+}
+
+.ui-badge--solid {
+    background-color: var(--tone);
+    color: #fff;
+}
+
+.ui-badge--secondary.ui-badge--solid,
+.ui-badge--warning.ui-badge--solid {
+    color: #241200;
+}
+
+.ui-badge--outline {
+    border-color: var(--tone);
+    background-color: transparent;
+    color: var(--tone);
+}
+
+/* ---- Loaders ---------------------------------------------------------- */
+.ui-spinner {
+    display: inline-block;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    color: var(--primary);
+    animation: ui-spin 0.7s linear infinite;
+}
+
+.ui-spinner--sm {
+    height: 1rem;
+    width: 1rem;
+}
+
+.ui-spinner--md {
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+.ui-spinner--lg {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-width: 3px;
+}
+
+.ui-page-loader {
+    display: flex;
+    height: 100%;
+    min-height: 12rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.ui-page-loader__text {
+    font-size: 0.8125rem;
+    color: var(--muted);
+}
+
+.ui-skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+    background-color: var(--surface-active);
+}
+
+.ui-skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent);
+    animation: ui-shimmer 1.4s var(--ease-standard) infinite;
+}
+
+.dark .ui-skeleton::after {
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.06), transparent);
+}
+
+.ui-table-skeleton>*+* {
+    border-top: 1px solid var(--border);
+}
+
+.ui-table-skeleton__row {
+    display: flex;
+    height: 3rem;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1rem;
+}
+
+@keyframes ui-shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}

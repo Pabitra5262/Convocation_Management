@@ -1,0 +1,128 @@
+/* ==========================================================================
+   Hover & click effects (ported from hims-ui-new motion.css).
+   - Press spring and ripple on buttons (driven by shared/utils/interactionFx.ts)
+   - Hover spotlight: a soft light follows the mouse inside buttons / chips
+   - Page, sub-menu and selected-item animations
+   All of it switches off with the OS "reduce motion" setting.
+   ========================================================================== */
+
+@keyframes fx-release { 0% { scale: var(--fx-press); } 55% { scale: 1.035; } 100% { scale: 1; } }
+@keyframes fx-ripple { from { transform: translate(-50%, -50%) scale(0); opacity: 0.32; } to { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
+@keyframes fx-shake { 0%, 100% { translate: 0; } 20% { translate: -5px; } 40% { translate: 5px; } 60% { translate: -3px; } 80% { translate: 3px; } }
+@keyframes fx-rise { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }
+@keyframes fx-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fx-expand { from { grid-template-rows: 0fr; opacity: 0; } to { grid-template-rows: 1fr; opacity: 1; } }
+@keyframes fx-collapse { from { grid-template-rows: 1fr; opacity: 1; } to { grid-template-rows: 0fr; opacity: 0; } }
+@keyframes fx-spark { from { opacity: 1; transform: translate(0, 0) scale(1); } to { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(0.2); } }
+@keyframes fx-sweep { from { background-position: 150% 0; } to { background-position: -60% 0; } }
+@keyframes fx-line { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes fx-flash { from { box-shadow: inset 0 0 0 100vmax color-mix(in srgb, var(--primary) 16%, transparent); } to { box-shadow: inset 0 0 0 100vmax transparent; } }
+@keyframes fx-scale-in { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+@keyframes fx-spin-in { from { rotate: -90deg; scale: 0.4; opacity: 0; } to { rotate: 0deg; scale: 1; opacity: 1; } }
+@keyframes fx-swing { 0%, 100% { rotate: 0deg; } 20% { rotate: 18deg; } 40% { rotate: -14deg; } 60% { rotate: 9deg; } 80% { rotate: -5deg; } }
+@keyframes fx-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 50%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
+@keyframes fx-slide-x { from { opacity: 0; translate: 10px 0; } to { opacity: 1; translate: 0 0; } }
+
+/* ---- Header micro-animations --------------------------------------------- */
+.fx-spin-in > svg { animation: fx-spin-in 0.45s var(--fx-spring) both; }
+.fx-swing { animation: fx-swing 0.7s ease-in-out; transform-origin: 50% 10%; }
+.fx-pulse { animation: fx-pulse 0.6s ease-out; }
+.fx-slide-x { animation: fx-slide-x var(--duration-normal) var(--fx-out) both; }
+
+/* ---- Press & ripple ------------------------------------------------------ */
+[data-pressed] { scale: var(--fx-press); }
+[data-pressed][data-icon-only] { rotate: -8deg; scale: 0.88; }
+.fx-release { animation: fx-release 220ms var(--fx-spring); }
+.fx-shake { animation: fx-shake 0.35s ease-in-out; }
+.fx-row-flash { animation: fx-flash 0.6s ease-out; }
+
+[data-ripple] {
+    position: relative;
+    overflow: hidden;
+}
+
+.fx-ripple {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 9999px;
+    background: currentColor;
+    transform: translate(-50%, -50%) scale(0);
+    animation: fx-ripple 520ms var(--fx-out) forwards;
+}
+
+/* ---- Hover spotlight ------------------------------------------------------
+   Position comes from --mx / --my (set in interactionFx.ts). */
+:is(.ui-btn, .action-icon) {
+    --spot-c: color-mix(in srgb, var(--primary) 20%, transparent);
+    --spot-r: 100px;
+    --mx: 50%;
+    --my: 50%;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+:is(.ui-btn--primary, .ui-btn--secondary, .ui-btn--success, .ui-btn--danger, .ui-btn--warning, .action-icon) {
+    --spot-c: rgb(255 255 255 / 0.42);
+    --spot-r: 90px;
+}
+
+:is(.ui-btn, .action-icon):not(:disabled)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(calc(var(--spot-r) * var(--spot-i, 1)) circle at var(--mx) var(--my), var(--spot-c), transparent 65%);
+    transition: opacity 0.25s;
+}
+
+:is(.ui-btn, .action-icon):not(:disabled):hover::after {
+    opacity: 1;
+}
+
+/* Cards that lift on hover */
+.fx-card {
+    transition: translate var(--duration-normal) var(--fx-out), box-shadow var(--duration-normal) var(--fx-out);
+}
+
+.fx-card:hover {
+    translate: 0 -2px;
+    box-shadow: 0 8px 20px -10px rgb(0 0 0 / 0.25);
+}
+
+/* ---- Touch, reduced motion, print ---------------------------------------- */
+@media (hover: none) {
+    :is(.ui-btn, .action-icon)::after { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-pressed],
+    .fx-release,
+    .fx-shake,
+    .fx-row-flash {
+        animation: none !important;
+        scale: none !important;
+        rotate: none !important;
+    }
+
+    .fx-ripple,
+    :is(.ui-btn, .action-icon)::after {
+        display: none;
+    }
+
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@media print {
+    .fx-ripple,
+    :is(.ui-btn, .action-icon)::after {
+        display: none;
+    }
+}

@@ -1,0 +1,95 @@
+/* ==========================================================================
+   Theme settings (profile menu → Theme settings). ThemeContext writes each
+   option to <html>; these rules turn them into variables the UI already uses.
+   Ported from hims-ui-new tokens.css / motion.css / sidebar.css.
+   ========================================================================== */
+
+/* ---- Density: control heights, card / page padding, section gaps ----------- */
+html[data-density='compact'] {
+    --control-h-sm: 1.75rem;
+    --control-h: 2rem;
+    --control-h-lg: 2.25rem;
+    --card-p: 1rem;
+    --layout-page-p: 1rem;
+    --section-gap: 1rem;
+}
+
+html[data-density='spacious'] {
+    --control-h-sm: 2.25rem;
+    --control-h: 2.75rem;
+    --control-h-lg: 3.25rem;
+    --card-p: 1.75rem;
+    --layout-page-p: 2rem;
+    --section-gap: 2rem;
+}
+
+@media (max-width: 767px) {
+    html[data-density] {
+        --layout-page-p: 1rem;
+        --section-gap: 1rem;
+    }
+}
+
+/* ---- Text size: everything is rem-based, so the root size scales the whole UI ---- */
+html[data-font='small'] {
+    font-size: 14.4px;
+}
+
+html[data-font='large'] {
+    font-size: 18px;
+}
+
+/* ---- Header drop shadow ------------------------------------------------- */
+html[data-header-shadow='off'] .app-header {
+    box-shadow: none;
+}
+
+/* ---- Button hover spotlight strength ------------------------------------ */
+html[data-spot='subtle'] { --spot-i: 0.6; }
+html[data-spot='standard'] { --spot-i: 1; }
+html[data-spot='expressive'] { --spot-i: 1.5; }
+
+html:is([data-spot='off'], [data-motion='reduced']) :is(.ui-btn, .action-icon)::after {
+    display: none;
+}
+
+/* ---- Click animations ---------------------------------------------------- */
+html[data-anim='expressive'] {
+    --fx-press: 0.94;
+}
+
+html[data-anim='off'] :is([data-pressed], .fx-release, .fx-shake, .fx-row-flash, .fx-swing, .fx-pulse, .fx-slide-x, .fx-spin-in > svg, .fx-page) {
+    animation: none !important;
+    scale: none !important;
+    rotate: none !important;
+}
+
+html[data-anim='off'] .fx-ripple {
+    display: none;
+}
+
+/* ---- Reduce motion: same effect as the OS "reduce motion" setting -------- */
+html[data-motion='reduced'] {
+    --duration-fast: 0.01ms;
+    --duration-normal: 0.01ms;
+    --duration-slow: 0.01ms;
+}
+
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
+/* ---- Theme reveal (Click animations → Expressive) ------------------------ */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }

@@ -1,0 +1,166 @@
+/* ==========================================================================
+   Card — white surface, hairline border, soft shadow (hims-ui-new ui/Card).
+   CardHeader with `divider`: a hairline under the heading with a short
+   saffron → primary accent at its left end.
+   ========================================================================== */
+
+:root {
+    --card-p: 1.25rem;
+}
+
+@media (max-width: 767px) {
+    :root {
+        --card-p: 1rem;
+    }
+}
+
+.ui-card {
+    border-radius: 12px;
+    border: 1px solid var(--border, #f0e2cf);
+    background-color: #ffffff;
+    color: var(--card-text);
+    box-shadow: 0 1px 3px 0 rgb(60 30 10 / 0.08), 0 1px 2px -1px rgb(60 30 10 / 0.04);
+}
+
+.ui-card+.ui-card {
+    margin-top: var(--section-gap, 1.5rem);
+}
+
+:is([class*="grid"], [class*="flex"]) > .ui-card,
+:is([class*="grid"], [class*="flex"]) > .ui-card + .ui-card {
+    margin-top: 0;
+}
+
+.ui-card--flush {
+    overflow: hidden;
+}
+
+/* Hide duplicate CardHeader if a Card is wrapped around a DataTable
+   (add .ui-card--with-header to keep the card's heading, e.g. a form step that holds a table). */
+/* .ui-card:not(.ui-card--with-header):has(.dt-box) > .ui-card__header,
+.ui-card:not(.ui-card--with-header):has(.dt-root) > .ui-card__header {
+    display: none;
+} */
+
+/* .ui-card:not(.ui-card--with-header):has(.dt-box) > .ui-card__body,
+.ui-card:not(.ui-card--with-header):has(.dt-root) > .ui-card__body {
+    padding: 0;
+} */
+
+/* Card that keeps its heading: the table inside drops its own card box so there is no box in a box. */
+.ui-card--with-header .dt-box {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.ui-card--interactive {
+    transition: box-shadow var(--duration-normal) var(--ease-standard), translate var(--duration-normal) var(--fx-out);
+}
+
+.ui-card--interactive:hover {
+    translate: 0 -2px;
+    box-shadow: 0 2px 6px -1px rgb(var(--shadow-color) / 0.08), 0 8px 20px -10px rgb(var(--shadow-color) / 0.25);
+}
+
+.ui-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: var(--card-p) var(--card-p) 0;
+}
+
+.ui-card__heading {
+    display: flex;
+    min-width: 0;
+    align-items: flex-start;
+    gap: 0.625rem;
+}
+
+.ui-card__icon {
+    display: inline-flex;
+    height: 1.75rem;
+    width: 1.75rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin-top: -0.125rem;
+    border-radius: 8px;
+    background: linear-gradient(180deg, #ffb04a, #f06a00);
+    color: #fff;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4), 0 4px 8px -4px #f06a00;
+}
+
+.ui-card__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+    letter-spacing: -0.005em;
+    color: var(--foreground);
+}
+
+.ui-card__description {
+    margin: 0.25rem 0 0;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary);
+}
+
+.ui-card__actions {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ui-card__body {
+    padding: var(--card-p);
+}
+
+.ui-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    border-top: 1px solid var(--border);
+    padding: 0.75rem var(--card-p);
+}
+
+/* Divider under the heading: hairline + short saffron accent */
+.card-header-divider {
+    position: relative;
+    padding-bottom: 0.75rem;
+}
+
+.card-header-divider::before {
+    content: '';
+    position: absolute;
+    left: var(--card-p);
+    right: var(--card-p);
+    bottom: 0;
+    height: 1px;
+    background: var(--border);
+}
+
+.card-header-divider::after {
+    content: '';
+    position: absolute;
+    left: var(--card-p);
+    bottom: -1px;
+    width: 44px;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--primary));
+}
+
+/* Seamless integration when a DataTable is placed inside a Card */
+.ui-card .dt-root {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    background-color: transparent;
+}

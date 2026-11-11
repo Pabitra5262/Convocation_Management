@@ -1,0 +1,274 @@
+
+
+:root {
+    /* ---- Layout ------------------------------------------------------- */
+    --layout-sidebar-w: 16rem;
+    --layout-sidebar-w-collapsed: 4.25rem;
+    --layout-header-h: 3.75rem;
+    --layout-page-p: 1rem;
+    --control-h: 2.5rem;
+    --control-h-sm: 2rem;
+
+    /* ---- Motion ------------------------------------------------------- */
+    --duration-fast: 120ms;
+    --duration-normal: 200ms;
+    --duration-slow: 320ms;
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+    --fx-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --fx-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --fx-press: 0.97;
+
+    /* ---- Brand -------------------------------------------------------- */
+    --primary: #cd440a;
+    --primary-hover: #b03806;
+    --primary-active: #962e04;
+    --primary-light: #ffedd5;
+    --primary-dark: #7c2d12;
+    --accent: #f59e0b;
+    /* saffron: header line, active bars */
+    --accent-hover: #d97706;
+    --accent-light: #fff3d6;
+    --secondary: #786354;
+    --success: #16803d;
+    --success-hover: #156534;
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+    --warning: #ca8a04;
+    --warning-hover: #a16207;
+    --info: #9a6024;
+
+    /* ---- Page & surfaces (warm saffron page tint) --------------------- */
+    --background: #fcf5e9;
+    --foreground: #291c14;
+    --surface: #ffffff;
+    --surface-hover: #fff7ed;
+    --surface-active: #fef0dc;
+    --text-secondary: #5c483a;
+    --muted: #786354;
+    --muted-foreground: #b09e90;
+    --border: #f0e2cf;
+    --border-light: #f8eee0;
+    --border-dark: #cdbaa2;
+    --focus-ring: #cd440a;
+    --shadow-color: 90 50 10;
+    /* rgb channels */
+
+    /* ---- Buttons ------------------------------------------------------ */
+    --btn-primary-from: #0b78b3;
+    --btn-primary-to: #080e34;
+    --btn-secondary-bg: #f59e0b;
+    --btn-secondary-hover: #d97706;
+    --btn-secondary-text: #241200;
+
+    /* ---- Sidebar (Campus night) -------------------------------------- */
+    --sidebar-bg: #1e1f39;
+    --sidebar-header: transparent;
+    --sidebar-border: rgba(255, 255, 255, 0.15);
+    --sidebar-hover: rgba(255, 255, 255, 0.1);
+    --sidebar-active: rgba(47, 53, 75, 0.55);
+    --sidebar-active-text: #ffb43e;
+    --sidebar-active-ring: rgba(205, 226, 237, 0.3);
+    --sidebar-section-text: #fcb547;
+    --sidebar-text: #ffffff;
+    --sidebar-text-muted: #c4cae8;
+    --sidebar-tree: rgba(255, 255, 255, 0.45);
+    --sidebar-scrim: 14 16 40;
+    /* rgb channels */
+
+    /* ---- Header (White + peach glow) --------------------------------- */
+    --header-bg:
+        radial-gradient(22% 320% at 100% 60%, #ffba6a 0%, #ffd3a0 38%, #ffeedb 68%, rgb(255 255 255 / 0) 100%),
+        #ffffff;
+    --header-line: var(--accent);
+    --header-text: #2a2b47;
+    --header-text-muted: #786354;
+    --header-border: #f0e2cf;
+    --header-avatar: var(--primary);
+    --header-shadow: 0 6px 14px -4px rgb(0 0 0 / 0.28);
+    --header-menu-bg: #ffffff;
+
+    /* ---- Breadcrumb --------------------------------------------------- */
+    --breadcrumb-text: #786354;
+    --breadcrumb-separator: #b09e90;
+    --breadcrumb-current: #291c14;
+    --breadcrumb-hover: var(--primary);
+
+    /* ---- Cards & modals ---------------------------------------------- */
+    --card-bg: #ffffff;
+    --card-border: #f0e2cf;
+    --card-text: #291c14;
+    --card-header-bg: var(--primary);
+    --card-header-text: #ffffff;
+    --card-header-border: rgba(0, 0, 0, 0.1);
+    --card-icon-bg: var(--accent);
+    --card-icon-color: #ffffff;
+    --modal-header: var(--primary);
+    --modal-footer: #fff7ed;
+
+    /* ---- Inputs ------------------------------------------------------- */
+    --input-bg: #ffffff;
+    --input-border: #cdbaa2;
+    --input-text: #291c14;
+
+    /* ---- Tables ------------------------------------------------------- */
+    --table-bg: #ffffff;
+    --table-border: #f0e2cf;
+    --table-row-border: #f8eee0;
+    --table-header-bg: #fff7ed;
+    --table-header-text: #5c483a;
+    --table-row-hover: #fff7ed;
+    --table-row-striped: #fffaf3;
+    --table-row-selected: #ffedd5;
+
+    /* ---- Tabs (solid peach blocks, amber selected) ------------------- */
+    --tab-bg: #fde7c7;
+    --tab-active: #b85a08;
+    --tab-text-active: #ffffff;
+    --tab-text-inactive: #5a3a12;
+
+    /* ---- Row action chips (solid gradients, white icon) -------------- */
+    --action-primary-from: #0b78b3;
+    --action-primary-to: #035a86;
+    --action-secondary-from: #8450f0;
+    --action-secondary-to: #6a2ad0;
+    --action-success-from: #178a43;
+    --action-success-to: #13702f;
+    --action-danger-from: #d63c2f;
+    --action-danger-to: #b32a20;
+    --action-warning-from: #ca8a04;
+    --action-warning-to: #a16207;
+    --action-info-from: #ba5b08;
+    --action-info-to: #9a4806;
+    --action-neutral-from: #655e58;
+    --action-neutral-to: #4a4540;
+    --control-h-lg: 2.75rem;
+    --action-shadow: 0 3px 8px -2px rgb(60 30 10 / 0.35);
+    --action-shadow-hover: 0 6px 14px -3px rgb(60 30 10 / 0.4);
+
+    /* Kept for components that still read the old pale chip colours */
+    --action-primary-bg: #e0f0fa;
+    --action-primary-text: #035a86;
+    --action-success-bg: #e4f4ea;
+    --action-success-text: #14532d;
+    --action-danger-bg: #fde8e6;
+    --action-danger-text: #7f1d1d;
+    --action-warning-bg: #fdf2c9;
+    --action-warning-text: #713f12;
+    --action-info-bg: #f3f0ed;
+    --action-info-text: #4a4540;
+
+    /* ---- Hover spotlight --------------------------------------------- */
+    --spot-i: 1;
+}
+
+/* ==========================================================================
+   Dark mode (ThemeContext toggles the .dark class on <html>)
+   ========================================================================== */
+.dark {
+    color-scheme: dark;
+
+    --primary: #e2621f;
+    --primary-hover: #f07a3a;
+    --primary-active: #f59e6b;
+    --primary-light: #3a2214;
+    --primary-dark: #fdba8c;
+    --accent: #fb923c;
+    --accent-hover: #fdba74;
+    --accent-light: #382414;
+    --secondary: #94a0b2;
+    --success: #4ade80;
+    --success-hover: #86efac;
+    --danger: #f87171;
+    --danger-hover: #fca5a5;
+    --warning: #fbbf24;
+    --warning-hover: #fcd34d;
+    --info: #38bdf8;
+
+    --background: #0b1220;
+    --foreground: #f1f5f9;
+    --surface: #111827;
+    --surface-hover: #182134;
+    --surface-active: #1f2940;
+    --text-secondary: #b4becd;
+    --muted: #94a0b2;
+    --muted-foreground: #5a6476;
+    --border: #263044;
+    --border-light: #1c2538;
+    --border-dark: #647187;
+    --focus-ring: #93c5fd;
+    --shadow-color: 0 0 0;
+
+    --btn-primary-from: #1689c7;
+    --btn-primary-to: #0b2a5c;
+
+    --sidebar-bg: #121426;
+
+    --header-bg:
+        radial-gradient(22% 320% at 100% 60%, rgb(255 186 106 / 0.2) 0%, rgb(255 186 106 / 0.08) 50%, rgb(255 186 106 / 0) 100%),
+        #111827;
+    --header-text: #f1f5f9;
+    --header-text-muted: #94a0b2;
+    --header-border: #263044;
+    --header-menu-bg: #111827;
+
+    --breadcrumb-text: #94a0b2;
+    --breadcrumb-separator: #5a6476;
+    --breadcrumb-current: #f1f5f9;
+
+    --card-bg: #111827;
+    --card-border: #263044;
+    --card-text: #f1f5f9;
+    --card-header-bg: #182134;
+    --card-header-text: #f1f5f9;
+    --card-header-border: #263044;
+    --card-icon-bg: #182134;
+    --card-icon-color: #fb923c;
+    --modal-footer: #182134;
+
+    --input-bg: #111827;
+    --input-border: #475569;
+    --input-text: #f1f5f9;
+
+    --table-bg: #111827;
+    --table-border: #263044;
+    --table-row-border: #1c2538;
+    --table-header-bg: #182134;
+    --table-header-text: #b4becd;
+    --table-row-hover: #182134;
+    --table-row-striped: #141c2e;
+    --table-row-selected: #3a2214;
+
+    --tab-bg: #182134;
+    --tab-active: #b85a08;
+    --tab-text-active: #ffffff;
+    --tab-text-inactive: #b4becd;
+
+    --action-shadow: 0 3px 8px -2px rgb(0 0 0 / 0.5);
+    --action-shadow-hover: 0 6px 14px -3px rgb(0 0 0 / 0.6);
+
+    --action-primary-bg: rgba(37, 99, 235, 0.2);
+    --action-primary-text: #60a5fa;
+    --action-success-bg: rgba(22, 163, 74, 0.2);
+    --action-success-text: #4ade80;
+    --action-danger-bg: rgba(220, 38, 38, 0.2);
+    --action-danger-text: #f87171;
+    --action-warning-bg: rgba(202, 138, 4, 0.2);
+    --action-warning-text: #fbbf24;
+    --action-info-bg: rgba(148, 160, 178, 0.2);
+    --action-info-text: #cbd5e1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --duration-fast: 0.01ms;
+        --duration-normal: 0.01ms;
+        --duration-slow: 0.01ms;
+    }
+}
+
+@media (max-width: 767px) {
+    :root {
+        --layout-page-p: 1rem;
+    }
+}

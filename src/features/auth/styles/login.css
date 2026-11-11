@@ -1,0 +1,599 @@
+/* ==========================================================================
+   Login page — ported from hims-ui-new styles/login.css.
+   The platform hub over a sunlit campus photo, with the sign-in card on the right.
+   - Desktop (over 900px wide and at least 600px tall) is exactly one screen tall with no scroll: spacing,
+     the slogan and the card's fields scale with the screen height, and the hub fills what is left.
+   - Below 900px the hub is hidden, the brand sits above the card, and the page scrolls normally.
+   The photo URL is passed in by Login.tsx as --login-photo.
+   ========================================================================== */
+:root {
+    --login-bg-1: 243 228 208;
+    --login-bg-2: 251 243 232;
+    --login-ink: 42 29 20;
+    --login-sub: 107 86 70;
+}
+
+.dark {
+    --login-bg-1: 27 20 16;
+    --login-bg-2: 37 27 21;
+    --login-ink: 245 235 224;
+    --login-sub: 196 179 163;
+}
+
+.login-page {
+    position: relative;
+    isolation: isolate;
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(400px, 1fr);
+    color: rgb(var(--login-ink));
+    background: linear-gradient(135deg, rgb(var(--login-bg-2)), rgb(var(--login-bg-1)));
+}
+
+/* Background photo, softly blurred; 16px larger than the screen so the blur never shows a pale edge. */
+.login-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background: rgb(var(--login-bg-1));
+}
+
+.login-bg::before {
+    content: '';
+    position: absolute;
+    inset: -16px;
+    background: var(--login-photo, none) center bottom / cover no-repeat;
+    filter: blur(4px);
+}
+
+.dark .login-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgb(var(--login-bg-1) / 0.78);
+}
+
+.login-scene {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.75rem, 2.4vh, 1.5rem);
+    min-width: 0;
+    min-height: 0;
+    padding: clamp(1rem, 4.2vh, 2.5rem) 2.5rem clamp(0.75rem, 2.4vh, 1.5rem);
+}
+
+.login-art {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    padding-right: 2rem;
+}
+
+.login-sub {
+    color: rgb(var(--login-sub));
+}
+
+/* Platform hub (PlatformHub.tsx): takes the height left under the logo; the SVG keeps its 3:2 ratio inside. */
+.login-hub {
+    width: 100%;
+    max-width: 860px;
+    flex: 1 1 0;
+    min-height: 0;
+}
+
+/* Mouse depth: each layer moves up to 20px (scaled by its --k) toward the pointer (useMouseDepth). */
+.hub-layer {
+    transform: translate(
+        calc(var(--hub-px, 0) * var(--k, 0) * 20px),
+        calc(var(--hub-py, 0) * var(--k, 0) * 20px)
+    );
+}
+
+.hub-label { fill: #0b1f4d; }
+.hub-sub { fill: #3e5577; }
+.dark .hub-label { fill: rgb(var(--login-ink)); }
+.dark .hub-sub { fill: rgb(var(--login-sub)); }
+
+@keyframes hubPop { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
+@keyframes hubDraw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes hubFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hubPing { from { opacity: 0.6; transform: scale(1); } to { opacity: 0; transform: scale(1.5); } }
+
+/* "Access granted": a green bar fills once while the dashboard opens. */
+.login-granted {
+    width: 100%;
+    max-width: 16rem;
+    height: 6px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--success) 15%, var(--surface));
+}
+
+.login-granted span {
+    display: block;
+    height: 100%;
+    background: var(--success);
+    transform-origin: left;
+    animation: loginGrant linear both;
+}
+
+@keyframes loginGrant { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+    .login-hub *,
+    .login-granted span {
+        animation: none !important;
+    }
+}
+
+/* Right column: the slogan and card, centred in the full height. */
+.login-side {
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    min-height: 0;
+    padding: clamp(0.75rem, 3vh, 1.5rem) 1.5rem;
+}
+
+.login-stack {
+    display: grid;
+    gap: clamp(0.5rem, 1.4vh, 0.875rem);
+    width: 100%;
+    max-width: 27.25rem;
+}
+
+.login-hero {
+    display: grid;
+}
+
+.login-hero-text {
+    display: grid;
+    margin: 0;
+    font-size: clamp(1.4rem, min(2.2vw, 4.4vh), 2.25rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #0b1f4d;
+    /* A soft glow in the page colour keeps the words crisp where window shadows cross them. */
+    text-shadow: 0 0 2px rgb(var(--login-bg-2)), 0 0 10px rgb(var(--login-bg-2) / 0.9), 0 0 22px rgb(var(--login-bg-2) / 0.7);
+}
+
+.login-hero-accent { color: rgb(239 167 54); }
+.dark .login-hero-text { color: rgb(var(--login-ink)); }
+
+/* Card: the app's standard surface; padding, spacing and the large control height tighten on short screens. */
+.login-card {
+    --control-h-lg: clamp(2.5rem, 5.6vh, 2.75rem);
+    --login-gap: clamp(0.5rem, 1.3vh, 0.75rem);
+    --login-block: clamp(0.875rem, 2.2vh, 1.25rem);
+    --card-px: 2.535rem;
+    position: relative;
+    width: 100%;
+    max-width: 23.95rem;
+    padding: clamp(1.5rem, calc(6.5vh - 1.375rem), 3.38rem) var(--card-px);
+    border-radius: 12px;
+    box-shadow: 0 20px 40px -8px rgb(var(--shadow-color) / 0.16), 0 8px 16px -8px rgb(var(--shadow-color) / 0.08);
+}
+
+.login-title {
+    margin: 0;
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.875rem;
+    letter-spacing: -0.015em;
+    color: var(--foreground);
+}
+
+.login-subtitle {
+    margin-top: clamp(0.375rem, 1vh, 0.625rem);
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary);
+}
+
+.login-alert {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: var(--login-block);
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
+    background: color-mix(in srgb, var(--danger) 8%, var(--surface));
+    padding: 0.625rem 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    color: var(--danger);
+}
+
+.login-form {
+    display: grid;
+    gap: var(--login-gap);
+    margin-top: var(--login-block);
+}
+
+/* Sign-in fields use the full large control height. */
+.ui-field.login-field {
+    display: flex;
+    height: var(--control-h-lg);
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 6px;
+    padding: 0 0.75rem;
+}
+
+.login-field input {
+    min-width: 0;
+    flex: 1 1 0%;
+    background: transparent;
+    font-size: 0.875rem;
+    color: var(--foreground);
+    outline: none;
+}
+
+/* Placeholders: smaller and lighter than typed text, so the hint reads as a hint. */
+.login-field input::placeholder {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: color-mix(in srgb, var(--muted) 65%, transparent);
+    opacity: 1;
+}
+
+.login-eye {
+    display: inline-flex;
+    flex-shrink: 0;
+    border-radius: 6px;
+    padding: 0.25rem;
+    color: var(--muted);
+    transition: color var(--duration-fast), background-color var(--duration-fast);
+}
+
+.login-eye:hover {
+    background-color: var(--surface-hover);
+    color: var(--foreground);
+}
+
+/* Header: a gradient shield badge beside "Sign in". */
+.login-head {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+}
+
+.login-head-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 1rem;
+    color: #fff;
+    background: linear-gradient(140deg, #2a7de1, #0a3d9c);
+    box-shadow: 0 12px 22px -12px rgb(21 101 216 / 0.9), inset 0 1px 0 rgb(255 255 255 / 0.25);
+}
+
+/* Language switch: a small frosted pill pinned to the page's top right corner. */
+.login-lang {
+    position: absolute;
+    z-index: 3;
+    top: 0.875rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.1875rem 0.1875rem 0.1875rem 0.5rem;
+    border-radius: 999px;
+    color: var(--muted);
+    background: rgb(255 255 255 / 0.78);
+    box-shadow: 0 4px 14px -8px rgb(11 31 77 / 0.45), 0 0 0 1px rgb(255 255 255 / 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.dark .login-lang {
+    background: color-mix(in srgb, var(--surface) 80%, transparent);
+    box-shadow: 0 0 0 1px var(--border);
+}
+
+.login-seg {
+    display: flex;
+    gap: 0.125rem;
+}
+
+.login-seg button {
+    height: 1.5rem;
+    padding: 0 0.625rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: background-color var(--duration-fast), color var(--duration-fast);
+}
+
+.login-seg button:hover {
+    color: var(--foreground);
+}
+
+.login-seg button[aria-checked="true"] {
+    background: var(--surface);
+    color: var(--foreground);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+}
+
+.dark .login-seg button[aria-checked="true"] {
+    background: var(--surface-active);
+}
+
+/* Coloured icon tiles: at the start of each field and on the help links. */
+.login-tile {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: calc(var(--control-h-lg) - 0.625rem);
+    height: calc(var(--control-h-lg) - 0.625rem);
+    margin-left: -0.375rem;
+    border-radius: 0.625rem;
+}
+
+.login-tile--blue { color: #1565d8; background: #e7f0fd; }
+.login-tile--amber { color: #c27803; background: #fff3dd; }
+.login-tile--green { color: #2e9e4f; background: #e5f5ea; }
+.dark .login-tile--blue { color: #6aa5ff; background: rgb(21 101 216 / 0.2); }
+.dark .login-tile--amber { color: #fbbf24; background: rgb(245 158 11 / 0.18); }
+.dark .login-tile--green { color: #4ade80; background: rgb(46 158 79 / 0.2); }
+
+/* Login button: the large primary button, full width, arrow after the label. */
+.login-card .ui-btn.login-submit {
+    height: var(--control-h-lg);
+}
+
+/* Account help: recovery links, a divider, then a separate button for new users. */
+.login-help {
+    display: grid;
+    gap: clamp(0.5rem, 1.3vh, 0.75rem);
+    margin-top: var(--login-block);
+}
+
+.login-help-links + .login-help-or {
+    margin-top: calc(30px - clamp(0.5rem, 1.3vh, 0.75rem));
+}
+
+.login-help-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.login-help-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4375rem;
+    border-radius: 4px;
+    color: var(--foreground);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-underline-offset: 4px;
+}
+
+.login-help-link:hover {
+    text-decoration: underline;
+}
+
+.login-help .login-tile {
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+    border-radius: 50%;
+}
+
+.login-help-links .login-tile,
+.login-request .login-tile {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+.login-help-or {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.login-help-or::before,
+.login-help-or::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.login-request {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    height: clamp(2.25rem, 5vh, 2.625rem);
+    border: 1.5px solid #2e9e4f;
+    border-radius: 8px;
+    background: var(--surface);
+    color: #1f7a3a;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: background-color 0.15s;
+}
+
+.login-request:hover { background: #f1faf4; }
+.dark .login-request { border-color: #4ade80; color: #4ade80; }
+.dark .login-request:hover { background: rgb(46 158 79 / 0.14); }
+
+.login-help-link:focus-visible,
+.login-request:focus-visible,
+.login-seg button:focus-visible,
+.login-eye:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+/* Security note: one slim strip with a small green shield badge. */
+.login-secure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: var(--login-block);
+    padding: 0.3125rem 0.625rem 0.3125rem 0.375rem;
+    border: 1px solid color-mix(in srgb, var(--success) 20%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--success) 10%, var(--surface));
+    color: var(--text-secondary);
+    font-size: 0.71875rem;
+    line-height: 1.35;
+}
+
+.login-secure-badge {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    color: #fff;
+    background: linear-gradient(180deg, var(--success), var(--success-hover));
+}
+
+@media (max-height: 760px) {
+    .login-head-icon { width: 2.75rem; height: 2.75rem; border-radius: 0.875rem; }
+}
+
+/* Very short windows (a laptop browser is often 600–680px tall). */
+@media (max-height: 680px) {
+    .login-card { --control-h-lg: 2.25rem; --login-gap: 0.4375rem; --login-block: 0.75rem; padding-block: 1.25rem; }
+    .login-hero-text { font-size: clamp(1.25rem, 3.8vh, 1.6rem); }
+    .login-help { gap: 0.5625rem; }
+    .login-help-links + .login-help-or { margin-top: calc(30px - 0.5625rem); }
+    .login-help-or { font-size: 0.6875rem; line-height: 1; }
+    .login-request { height: 2.125rem; }
+}
+
+@media (max-height: 640px) {
+    .login-card { padding-block: 0.5rem; --login-block: 0.625rem; }
+    .login-stack { gap: 0.5rem; }
+    .login-head-icon { width: 2.5rem; height: 2.5rem; }
+    .login-subtitle { margin-top: 0.25rem; }
+    .login-hero-text { font-size: clamp(1.2rem, 3.4vh, 1.5rem); }
+}
+
+/* Desktop: lock the page to one screen. Below 600px tall it scrolls rather than squeeze the form. */
+@media (min-width: 901px) and (min-height: 600px) {
+    .login-page { height: 100dvh; min-height: 0; grid-template-rows: minmax(0, 1fr); }
+}
+
+/* Odisha emblem: black on the light page, white in dark mode. */
+.login-emblem { filter: brightness(0); }
+.dark .login-emblem { filter: brightness(0) invert(1); }
+.dark .login-wordmark { filter: drop-shadow(0 0 6px rgb(255 255 255 / 0.55)); }
+
+@media (max-width: 900px) {
+    .login-page { grid-template-columns: minmax(0, 1fr); }
+    .login-lang { position: static; justify-self: end; margin: 0.75rem 1rem 0 0; }
+    .login-scene { padding: 1.25rem 1rem 0; }
+    .login-art { display: none; }
+    .login-bg::before { background-position: 70% bottom; }
+    .login-side { padding: 1.25rem 1rem 1.5rem; }
+}
+
+@media print {
+    .login-bg { display: none; }
+}
+
+/* Captcha image and refresh button: the same height as the field beside them. */
+.login-captcha {
+    display: grid;
+    place-items: center;
+    width: 6.25rem;
+    height: var(--control-h-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+}
+
+.login-card .ui-btn.login-captcha-btn {
+    width: var(--control-h-lg);
+    height: var(--control-h-lg);
+}
+
+@media (max-width: 380px) {
+    .login-captcha { width: 6rem; }
+}
+
+/* ---------- Successful sign-in (about 1.6 s) ---------- */
+.hub-wave { transform-box: fill-box; transform-origin: center; animation: hubWave 0.7s ease-out both; }
+@keyframes hubWave { from { opacity: 0.7; transform: scale(0.45); } to { opacity: 0; transform: scale(1.35); } }
+.hub-node polygon { transition: fill 0.3s ease var(--arrive, 0s); }
+.hub-node.is-ok { transform-box: fill-box; animation: hubBump 0.35s ease-out var(--arrive, 0s) both; }
+@keyframes hubBump { 40% { transform: translateY(-6px); } to { transform: none; } }
+
+.login-done {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 0.75rem;
+    height: 100%;
+    min-height: inherit;
+    text-align: center;
+}
+
+.login-done-mark { width: 5.75rem; height: 5.75rem; }
+.login-done-disc { fill: color-mix(in srgb, var(--success) 15%, var(--surface)); transform-origin: 46px 46px; animation: loginPop 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
+.login-done-ring { fill: none; stroke: var(--success); stroke-width: 4; stroke-dasharray: 100; transform: rotate(-90deg); transform-origin: 46px 46px; animation: loginDraw 0.35s ease-out 0.05s both; }
+.login-done-tick { fill: none; stroke: var(--success); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 100; animation: loginDraw 0.25s ease-out 0.3s both; }
+@keyframes loginPop { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes loginDraw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+
+.login-done-who {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin: 0;
+    padding: 0.375rem 0.875rem 0.375rem 0.375rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface-hover);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.login-done-who b { color: var(--foreground); font-weight: 600; }
+
+.login-done-avatar {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: #ffe9d6;
+    color: #8a3e00;
+    font-size: 0.8125rem;
+    font-weight: 700;
+}
+
+/* Hand-off: the dashboard background wipes out from the card. */
+.login-wipe { position: fixed; inset: 0; z-index: 50; background: var(--background); animation: loginWipe 0.45s cubic-bezier(0.6, 0, 0.2, 1) both; }
+@keyframes loginWipe { from { clip-path: circle(0 at var(--wx) var(--wy)); } to { clip-path: circle(150vmax at var(--wx) var(--wy)); } }
+
+.hub-roof-ok { transform-box: fill-box; transform-origin: center; animation: loginPop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4) both; }
+
+/* Reduced motion: no wave, bump, drawing or wipe; the finished state appears at once. */
+@media (prefers-reduced-motion: reduce) {
+    .hub-wave { display: none; }
+    .hub-node polygon,
+    .login-hub * { transition-delay: 0s !important; transition-duration: 0.15s !important; }
+    .login-done *,
+    .hub-roof-ok { animation: none !important; }
+}
