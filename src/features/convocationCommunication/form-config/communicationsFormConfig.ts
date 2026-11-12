@@ -7,7 +7,10 @@ export const definition: PageDefinition = {
   path: "/convocation/communications",
   roles: ["admin","coordinator","hed","super"],
   writers: ["admin","coordinator","hed","super"],
-  defaults: {"eventId":"all","group":"All Registered","channels":["Email"]},
+  defaults: {"eventId":"all","group":"All Registered","channels":["Email"],
+    subject: 'Convocation Participation Update',
+    body: 'Dear Student,\n\nPlease log in to the Convocation portal to review your registration status and attendance details. Once your invitation and entry pass are available, please download them from the portal.\n\nFor in-person attendance, please bring your entry pass and a valid photo ID.\n\nRegards,\nConvocation Coordination Team',
+  },
   fields: ctx => [
 fields.field('eventId','Convocation Event','select',4,{required:true,options:[{value:'all',label:'All Events'},...fields.eventOptions(ctx)]}),
 fields.field('group','Recipient Group','select',4,{required:true,options:fields.options(['All Registered','In-person','Virtual','In-Absentia','Specific Institution','Custom Selection','Pending Verification'])}),
@@ -17,7 +20,7 @@ fields.field('channels','Channel','multiselect',4,{required:true,options:fields.
 fields.field('subject','Subject / Title','text',6,{maxLength:200}),
 fields.field('scheduledAt','Schedule Send (Optional)','datetime-local',3),
 fields.field('attachment','Attachment','file',3,{accept:'.pdf,.png,.jpg,.jpeg',helpText:'Maximum 5 MB'}),
-fields.field('body','Message Body','textarea',12,{required:true,rows:1,className:'!h-auto',helpText:'Merge fields: {{Student Name}}, {{Event Date}}, {{Seat No.}}, {{Registration ID}}'})],
+fields.field('body','Message Body','textarea',12,{required:true,rows:1,className:'!h-auto',helpText:'Include the purpose of the message, relevant date and time, venue or portal details, and any action required from recipients.'})],
   columns: [{"name":"eventId","label":"Convocation Event"},{"name":"group","label":"Recipient Group"},{"name":"channels","label":"Channels"},{"name":"subject","label":"Subject"},{"name":"recipientCount","label":"Recipients"},{"name":"scheduledAt","label":"Scheduled For"}],
 };
 

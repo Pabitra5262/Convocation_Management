@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { ConvocationEvent, ConvocationEventValues, EventStore } from '../types';
 import { eventSchema, today } from '../validation/eventValidation';
-import { addDemoData } from './demoData';
+import { addDemoData, legacyInstitutionNames } from './demoData';
 
 // Local persistence until the Convocation API and institution master are supplied.
 const STORAGE_KEY = 'hims.convocation.events.v1';
@@ -19,6 +19,12 @@ export const eventService = {
     const raw = localStorage.getItem(STORAGE_KEY);
     const parsed = storedData.safeParse(raw ? JSON.parse(raw) : { events: [], institutions: [] });
     if (!parsed.success) throw new Error('Saved convocation data could not be read. Please contact support.');
+    let renamed = false;
+    parsed.data.institutions.forEach(institution => {
+      const name = legacyInstitutionNames.get(institution.name);
+      if (name) { institution.name = name; renamed = true; }
+    });
+    if (renamed) localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed.data));
     if (!localStorage.getItem(DEMO_KEY)) {
       const seeded = addDemoData(parsed.data);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));

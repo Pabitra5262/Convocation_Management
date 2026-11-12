@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { ArrowLeft, Pencil, LockKeyhole, LockKeyholeOpen } from 'lucide-react';
+import { ArrowLeft, Pencil, LockKeyhole, LockKeyholeOpen, X } from 'lucide-react';
 import PageHeader from '@/shared/components/layout/PageHeader';
 import Card, { CardBody, CardHeader } from '@/shared/components/layout/Card';
 import { Badge, Button, DataTable, DialogModal, Modal, type Column } from '@/shared/components/ui';
@@ -25,6 +25,7 @@ export default function ConvocationConfiguration() {
   const [toggleTarget, setToggleTarget] = useState<ConvocationEvent | null>(null);
   const [formVersion, setFormVersion] = useState(0);
   const [viewId, setViewId] = useState<string | null>(null);
+  const [institutionsEventId, setInstitutionsEventId] = useState<string | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const event = store.events.find(e => e.id === eventId);
   const creating = pathname.endsWith('/create');
@@ -33,6 +34,8 @@ export default function ConvocationConfiguration() {
   const editableEvent = editing && event && !['Completed', 'Cancelled'].includes(event.status) ? event : undefined;
   const editingEventId = editableEvent?.id;
   const viewedEvent = store.events.find(e => e.id === viewId) ?? (eventId && !creating && !editableEvent ? event : undefined);
+  const institutionsEvent = store.events.find(e => e.id === institutionsEventId);
+  const selectedInstitutions = store.institutions.filter(institution => institutionsEvent?.institutionIds.includes(institution.id));
   const closeView = () => { setViewId(null); if (eventId && !editableEvent) goBack(); };
   const resetForm = () => { setFormVersion(version => version + 1); if (eventId || creating) goBack(); };
   useEffect(() => {
@@ -48,7 +51,7 @@ export default function ConvocationConfiguration() {
     { id: 'academicYear', header: 'Academic Year', accessor: e => e.academicYear, sortable: true },
     { id: 'eventDate', header: 'Event Date', accessor: e => e.eventDate, cell: e => formatDate(e.eventDate), sortable: true },
     { id: 'registrationPeriod', header: 'Registration Period', accessor: e => `${formatDate(e.registrationStart)} – ${formatDate(e.registrationEnd)}` },
-    { id: 'institutions', header: 'Institutions', accessor: e => store.institutions.filter(i => e.institutionIds.includes(i.id)).map(i => i.name).join(', '), cell: e => <span title={store.institutions.filter(i => e.institutionIds.includes(i.id)).map(i => i.name).join(', ')}>{e.institutionIds.length} institution{e.institutionIds.length === 1 ? '' : 's'}</span> },
+    { id: 'institutions', header: 'Institutions', accessor: e => store.institutions.filter(i => e.institutionIds.includes(i.id)).map(i => i.name).join(', '), cell: e => <Button variant="link" aria-label={`View institutions for ${e.name}`} onClick={() => setInstitutionsEventId(e.id)}>{e.institutionIds.length} institution{e.institutionIds.length === 1 ? '' : 's'}</Button> },
     { id: 'status', header: 'Event Status', accessor: e => e.status, cell: e => <Badge tone={e.status === 'Cancelled' ? 'danger' : e.status === 'Scheduled' ? 'info' : e.status === 'Completed' ? 'success' : 'neutral'} dot>{e.status}</Badge> },
     { id: 'registration', header: 'Registration', accessor: registrationStatus, cell: e => <Badge tone={registrationStatus(e) === 'Open' ? 'success' : 'neutral'} dot>{registrationStatus(e)}</Badge> },
   ];
@@ -79,6 +82,15 @@ export default function ConvocationConfiguration() {
           </CardBody>
         </Card>
       </>}
+    <Modal isOpen={!!institutionsEvent} onClose={() => setInstitutionsEventId(null)} title="Selected Institutions" size="lg">
+      <p className="mb-4 font-semibold">{institutionsEvent?.name}</p>
+      {selectedInstitutions.length ? <ul className="list-disc space-y-2 pl-5">
+        {selectedInstitutions.map(institution => <li key={institution.id}>{institution.name}</li>)}
+      </ul> : <p>No institutions selected.</p>}
+      <div className="mt-5 flex justify-start border-t border-border pt-4">
+        <Button variant="outline" leftIcon={X} onClick={() => setInstitutionsEventId(null)}>Close</Button>
+      </div>
+    </Modal>
     <Modal isOpen={!!viewedEvent} onClose={closeView} title="View Convocation Event" size="7xl">
       {viewedEvent && <EventForm key={`view-${viewedEvent.id}`} readOnly event={viewedEvent} events={store.events} institutions={store.institutions}
         onSave={() => false} onBack={closeView} onAddInstitution={() => false} />}

@@ -23,7 +23,7 @@ export interface RecordListProps {
   actions: (record: RecordRow) => RowActionItem[];
   onView: (record: RecordRow) => void;
 }
-export function ModuleContent({ controller: c, renderList }: { controller: ModuleController; renderList?: (props: RecordListProps) => ReactNode }) {
+export function ModuleContent({ controller: c, renderList, summary }: { controller: ModuleController; renderList?: (props: RecordListProps) => ReactNode; summary?: ReactNode }) {
   const navigate = useNavigate();
   const embedded = useContext(EmbeddedScreenContext);
   const { definition: def } = c;
@@ -105,7 +105,7 @@ export function ModuleContent({ controller: c, renderList }: { controller: Modul
       if (['hed', 'super'].includes(c.actor.key) && record.values.response) add('close', 'Close Observation', Check, () => request('close', record));
     }
     if (def.key === 'awards' && ['authority', 'super'].includes(c.actor.key) && record.status !== 'Approved') add('award', 'Approve Award List', ShieldCheck, () => request('award', record));
-    if (['hed', 'progress'].includes(def.key)) add('drill', def.key === 'hed' ? 'View University Progress' : 'View Participation', Eye, () => void navigate(def.key === 'hed' ? '/convocation/progress' : `/convocation/reports?eventId=${record.id}`));
+    if (['hed', 'progress'].includes(def.key)) add('drill', def.key === 'hed' ? 'View University Progress' : 'View Participation', Eye, () => void navigate(def.key === 'hed' ? `/convocation/progress?institutionId=${encodeURIComponent(record.id)}` : `/convocation/reports?eventId=${encodeURIComponent(String(record.values.eventId ?? record.id))}&institutionId=${encodeURIComponent(String(record.values.institutionId ?? ''))}`));
     return result;
   };
   const columns: Column<RecordRow>[] = def.columns.map(column => ({ id: column.name, header: column.label, accessor: record => c.displayValue(column.name, record.values[column.name]), sortable: true,
@@ -132,14 +132,14 @@ export function ModuleContent({ controller: c, renderList }: { controller: Modul
   if (!c.allowed) return <><PageHeader title={def.title} /><p role="alert">This page is not available for your role.</p></>;
   return <>
     {!embedded && <PageHeader title={def.title} breadcrumbs={[{ label: 'Convocation' }, { label: def.title }]} />}
-    {['reports', 'hed', 'progress'].includes(def.key) && <div className="mb-5 grid grid-cols-2 gap-4 lg:grid-cols-3">
+    {summary ?? (['reports', 'hed', 'progress'].includes(def.key) && <div className="mb-5 grid grid-cols-2 gap-4 lg:grid-cols-3">
       <KpiCard label="Registered" value={apps.filter(a => a.status !== 'Draft').length} />
       <KpiCard label="Approved" value={apps.filter(a => a.status === 'Approved').length} />
       <KpiCard label="In-person" value={apps.filter(a => a.status !== 'Draft' && a.values.attendance === 'In-person').length} />
       <KpiCard label="Virtual" value={apps.filter(a => a.status !== 'Draft' && a.values.attendance === 'Virtual').length} />
       <KpiCard label="Pending Verification / Approval" value={apps.filter(a => !['Draft','Approved','Rejected'].includes(a.status)).length} />
       <KpiCard label="Certificates Generated" value={c.data.certificates.filter(cert => apps.some(a => a.id === cert.values.applicationId)).length} />
-    </div>}
+    </div>)}
     {def.key === 'students' && c.canWrite && <StudentImport controller={c} />}
     {c.canWrite && !def.readOnly && <Card className="mb-5"><CardHeader title={c.editing ? `Edit ${def.formTitle}` : def.formTitle} divider /><CardBody>
       <FormProvider {...c.methods}>

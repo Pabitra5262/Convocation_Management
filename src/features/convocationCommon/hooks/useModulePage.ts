@@ -30,7 +30,7 @@ export function useModulePage(definition: PageDefinition, service: PageService, 
   const allowed = definition.roles.includes(actor.key);
   const canWrite = allowed && definition.writers.includes(actor.key);
   const formId = useId();
-  const [filters, setFilters] = useState({ eventId: searchParams.get('eventId') ?? '', status: '', institutionId: '', program: '', attendance: '', certificateStatus: '' });
+  const [filters, setFilters] = useState({ eventId: searchParams.get('eventId') ?? '', status: '', institutionId: searchParams.get('institutionId') ?? '', program: '', attendance: '', certificateStatus: '' });
   const [applied, setApplied] = useState(filters);
   const [filtersHidden, setFiltersHidden] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);

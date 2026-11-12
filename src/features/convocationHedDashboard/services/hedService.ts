@@ -1,3 +1,4 @@
 import { moduleService } from '@/features/convocationCommon/services/store';
-export const service = moduleService('hed');
+import { universityProgressRows } from './hedDemoData';
+export const service = { ...moduleService('hed'), read: universityProgressRows };
 

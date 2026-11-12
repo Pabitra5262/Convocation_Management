@@ -1,7 +1,22 @@
 import type { ConvocationEvent, EventStore } from '../types';
 import { today } from '../validation/eventValidation';
 
-/** Fictional records for the client wireframe. Dates are relative to the first load. */
+export const odishaInstitutionNames = [
+  'Utkal University',
+  'Ravenshaw University',
+  'Sambalpur University',
+  'Berhampur University',
+];
+
+// Rename only the former sample labels, preserving IDs and existing selections.
+export const legacyInstitutionNames = new Map([
+  ['Utkal University', odishaInstitutionNames[0]],
+  ['Ravenshaw University', odishaInstitutionNames[1]],
+  ['Sambalpur University', odishaInstitutionNames[2]],
+  ['Berhampur University', odishaInstitutionNames[3]],
+]);
+
+/** Sample events with real Odisha institution names. Dates are relative to the first load. */
 export const addDemoData = (existing: EventStore): EventStore => {
   const date = (offset: number) => {
     const value = new Date(`${today()}T12:00:00Z`);
@@ -13,7 +28,7 @@ export const addDemoData = (existing: EventStore): EventStore => {
     return `${year}-${year + 1}`;
   };
   const institutions = [...existing.institutions];
-  const ids = ['University College of Arts', 'University College of Science', 'University College of Commerce', 'Institute of Postgraduate Studies'].map((name, index) => {
+  const ids = odishaInstitutionNames.map((name, index) => {
     const found = institutions.find(i => i.name.trim().toLowerCase() === name.toLowerCase());
     if (found) return found.id;
     const id = `demo-institution-${index + 1}`;
